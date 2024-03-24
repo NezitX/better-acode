@@ -1,0 +1,16 @@
+{
+  "id": "acode.plugin.betterAcoode",
+  "name": "Better Acode",
+  "main": "dist/main.js",
+  "version": "1.0.0",
+  "readme": "readme.md",
+  "icon": "better-acode.png",
+  "files": [],
+  "minVersionCode" : 290,
+  "price": 0,
+  "author": {
+    "name": "Nezit",
+    "email": "xnezit@gmail.com",
+    "github": "NezitX"
+  }
+}
