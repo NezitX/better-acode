@@ -9,7 +9,7 @@ const newAppSettings = {
     showHiddenFiles: true,
     sortByName: false
   },
-  fontSize: ".7rem",
+  fontSize: "10px",
   textWrap: false,
   softTab: true,
   tabSize: 2,
@@ -102,18 +102,23 @@ const newEditorSettings = {
   useElasticTabstops: true
 };
 
+const $ = (e) => document.querySelector(".ace_editor");
+
 class AcodePlugin {
+  #oldLineHeight = $(".ace_editor").style["line-height"];
   async init() {
     this.updateAppSettings();
     this.updateEditorSettings();
+
+    $(".ace_editor").style["line-height"] = "1.36rem";
   };
 
   updateAppSettings() {
     return settings.update(newAppSettings);
   };
-  
+
   resetAppSettings() {
-    return Object.keys(newAppSettings).forEach((sett) => settings.reset(sett));
+    //return Object.keys(newAppSettings).forEach((sett) => settings.reset(sett));
   };
 
   updateEditorSettings() {
@@ -122,6 +127,8 @@ class AcodePlugin {
 
   async destroy() {
     this.resetAppSettings();
+
+    $(".ace_editor").style["line-height"] = this.#oldLineHeight;
   };
 };
 
@@ -130,7 +137,8 @@ if (window.acode) {
   acode.setPluginInit(
     plugin.id,
     async (baseUrl, $page, {
-      cacheFileUrl, cacheFile
+      cacheFileUrl,
+      cacheFile
     }) => {
       if (!baseUrl.endsWith("/")) {
         baseUrl += "/";

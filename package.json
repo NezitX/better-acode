@@ -4,7 +4,7 @@
   "description": "A Plugin For Acode to make it more better",
   "main": "dist/main.js",
   "repository": "https://github.com/NezitX/better-acode.git",
-  "author": "NezitX <xnezit@gmail.com>",
+  "author": "NezitX",
   "license": "MIT",
   "dependencies": {
     "html-tag-js": "^1.1.41"
