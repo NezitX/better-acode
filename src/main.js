@@ -86,8 +86,10 @@ const newAppSettings = {
   maxRetryCount: 3,
   showRetryToast: false,
   showSideButtons: true,
-  showAnnotations: true
+  showAnnotations: true,
+  lineHeight: "1.36"
 };
+
 const newEditorSettings = {
   selectionStyle: "line",
   highlightActiveLine: true,
@@ -99,56 +101,34 @@ const newEditorSettings = {
   enableLiveAutocompletion: true,
   enableSnippets: true,
   enableEmmet: true,
-  useElasticTabstops: true
+  useElasticTabstops: true,
 };
 
-const $ = (e) => document.querySelector(".ace_editor");
-
-class AcodePlugin {
-  #oldLineHeight = $(".ace_editor").style["line-height"];
-  async init() {
+class BetterAcode {
+  init() {
     this.updateAppSettings();
     this.updateEditorSettings();
-
-    $(".ace_editor").style["line-height"] = "1.36rem";
   };
+
+  destroy() {};
 
   updateAppSettings() {
     return settings.update(newAppSettings);
   };
 
-  resetAppSettings() {
-    //return Object.keys(newAppSettings).forEach((sett) => settings.reset(sett));
-  };
-
   updateEditorSettings() {
     return editor.setOptions(newEditorSettings);
-  };
-
-  async destroy() {
-    this.resetAppSettings();
-
-    $(".ace_editor").style["line-height"] = this.#oldLineHeight;
   };
 };
 
 if (window.acode) {
-  const acodePlugin = new AcodePlugin();
-  acode.setPluginInit(
-    plugin.id,
-    async (baseUrl, $page, {
-      cacheFileUrl,
-      cacheFile
-    }) => {
-      if (!baseUrl.endsWith("/")) {
-        baseUrl += "/";
-      }
-      acodePlugin.baseUrl = baseUrl;
-      await acodePlugin.init($page, cacheFile, cacheFileUrl);
+  const betterAcode = new BetterAcode();
+  acode.setPluginInit(plugin.id,
+    async (baseUrl, $page, { cacheFileUrl, cacheFile }) => {
+      betterAcode.baseUrl = baseUrl.endsWith("/") ? baseUrl : baseUrl += '/';
+      await betterAcode.init($page, cacheFile, cacheFileUrl);
     }
   );
-  acode.setPluginUnmount(plugin.id,
-    () => {
-      acodePlugin.destroy();
-    });
+
+  acode.setPluginUnmount(plugin.id, betterAcode.destroy.bind(betterAcode));
 };
